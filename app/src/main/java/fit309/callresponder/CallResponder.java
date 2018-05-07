@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -33,11 +34,14 @@ public class CallResponder extends BroadcastReceiver {
 
         try {
             endCall(context);
-            Toast.makeText(context, "Incomming call: " + number, Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            return;
         }
+
+        SmsManager.getDefault().sendTextMessage(number, null, message, null, null);
+        Toast.makeText(context, "Incomming call: " + number, Toast.LENGTH_LONG).show();
     }
 
     protected void endCall(Context context) throws Exception {
